@@ -6,4 +6,6 @@ To install, navigate to the root directory. Install all dependencies and the com
 `pip install -r requirements.txt && python3 setup.py install`. Then the application may be invoked as `reddittools arg1 arg2
 ...`.
 
+Tested on Ubuntu 20.04.2 LTS and Mac OSX TODO.
+
 The full install, starting from Git, then making a virtual environment, installing dependencies and the library, and then running the program, is as follows:
