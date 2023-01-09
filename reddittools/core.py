@@ -16,6 +16,7 @@ from dotenv import dotenv_values
 
 from . import m
 from .postfinder import RedditPostFinder
+from .database import MongoWrapper
 
 
 def main():
@@ -26,4 +27,5 @@ def main():
 
     print(f"Version {__version__}")
     print(f"Args passed: {sys.argv[1:]}")
-    post_finder = RedditPostFinder()
+    mongo = MongoWrapper(config["MONGO_URL"], config["MONGO_DB_NAME"])
+    # post_finder = RedditPostFinder()
