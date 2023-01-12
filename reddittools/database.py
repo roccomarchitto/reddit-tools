@@ -64,6 +64,10 @@ class MongoWrapper(DatabaseWrapper):
         self.client = self.connect()
         self.db = self.client[mongo_db_name]
         self.collection = self.db["users"]
+        for i in range(500):
+            self.submit_post()
+        print(self.get_posts()[-3:])
+
         # print(self.client.database_names())
         # for i in self.client.list_database_names():
         #    print(i)
@@ -78,10 +82,27 @@ class MongoWrapper(DatabaseWrapper):
         return client
 
     def submit_post(self) -> str:
-        post = {}
-        post_id = self.collection.insert_one(post).inserted_id
-        print(post_id)
-        return post_id
+        # Serialize a UserPost object and append to the user
+
+        username = "sss"
+        import random
+
+        post_schema = {
+            "title": "example title",
+            "author": "sampleauthor",
+            "upvotes": random.random() * 100000,
+            "ex": "example",
+            "url": "https://www.reddit.com",
+            "ex2": 200,
+        }
+        # Use the $push operator to append to the 'users' array
+        newval = {"$push": {"posts": post_schema}}
+        self.collection.update_one({"name": username}, newval)
+
+        # post = {"name": "squilliam", "posts": ["squanto", "squarbo"]}
+        # post_id = self.collection.insert_one(post).inserted_id
+        # print(post_id)
+        # return post_id
 
     # TODO typehint List[User]
     def get_posts(self):
