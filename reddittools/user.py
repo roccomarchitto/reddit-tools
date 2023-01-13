@@ -27,7 +27,7 @@ class UserPost:
             "author",
             "id",
             "is_original_content",
-            "name",
+            "title",
             "num_comments",
             "over_18",
             "score",
@@ -42,9 +42,7 @@ class UserPost:
         # Note that the attributes dictionary is now immutable.
         for attribute in attribute_names:
             self.__post[attribute] = (
-                post_attributes[attribute]
-                if attribute in post_attributes
-                else "DEFAULT"
+                post_attributes[attribute] if attribute in post_attributes else ""
             )
 
         # Add an ismedia category if needed
@@ -52,6 +50,15 @@ class UserPost:
             self.__post["ismedia"] = (
                 True if post_attributes["selftext"] == "" else False
             )
+
+    def __repr__(self):
+        return (
+            "UserPost for user '"
+            + self.__post["author"]
+            + "' with title '"
+            + self.__post["title"][:50]
+            + "...'"
+        )
 
     def get_post_dict(self):
         return self.__post

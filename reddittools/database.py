@@ -6,6 +6,7 @@ TODO
 
 from abc import ABC, abstractmethod
 from pymongo import MongoClient
+from .user import User, UserPost
 
 
 class DatabaseWrapper(ABC):
@@ -64,45 +65,46 @@ class MongoWrapper(DatabaseWrapper):
         self.client = self.connect()
         self.db = self.client[mongo_db_name]
         self.collection = self.db["users"]
-        for i in range(500):
-            self.submit_post()
-        print(self.get_posts()[-3:])
 
-        # print(self.client.database_names())
-        # for i in self.client.list_database_names():
-        #    print(i)
-        # print("\n")
-        # for i in self.db.list_collection_names():
-        #    print(i)
-        # self.submit_post()
+        # pa = {"author": "MOO", "score": 8}
+        # u = UserPost(pa)
+        # print("X:", self.submit_post(u))
+        # print(self.get_posts()[-3:])
 
     def connect(self) -> MongoClient:
         client = MongoClient(self.mongo_url, serverSelectionTimeoutMS=5000)
         client.server_info()  # Raise an exception if the connection times out
         return client
 
-    def submit_post(self) -> str:
-        # Serialize a UserPost object and append to the user
+    def submit_user(self) -> bool:
+        # Submit a new user (and its in-memory posts) to the database
+        # NOTE: This is a destructive action
+        return False
 
-        username = "sss"
-        import random
+    def submit_post(self, post_object: UserPost) -> bool:
+        """Destructure a UserPost object and append to the user's database entry"""
 
-        post_schema = {
-            "title": "example title",
-            "author": "sampleauthor",
-            "upvotes": random.random() * 100000,
-            "ex": "example",
-            "url": "https://www.reddit.com",
-            "ex2": 200,
-        }
+        post_data = post_object.get_post_dict()
+        username = post_data["author"]
+
+        # If the user doesn't exist, create it
+        user_dict = self.collection.find_one({"name": username})
+        print(user_dict)
+        if not user_dict:
+            user_starter = {"name": username, "posts": []}
+            self.collection.insert_one(user_starter)
+
         # Use the $push operator to append to the 'users' array
-        newval = {"$push": {"posts": post_schema}}
-        self.collection.update_one({"name": username}, newval)
-
-        # post = {"name": "squilliam", "posts": ["squanto", "squarbo"]}
-        # post_id = self.collection.insert_one(post).inserted_id
-        # print(post_id)
-        # return post_id
+        newval = {"$push": {"posts": post_data}}
+        update_status = self.collection.update_one({"name": username}, newval)
+        # Ensure 1) at least one field was matched, and 2) the matched field was updated
+        if (
+            update_status.matched_count > 0
+            and update_status.matched_count == update_status.modified_count
+        ):
+            return True  # Update succeeded
+        else:
+            return False
 
     # TODO typehint List[User]
     def get_posts(self):
