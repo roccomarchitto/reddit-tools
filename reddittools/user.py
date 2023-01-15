@@ -55,10 +55,10 @@ class UserPost:
 
     def __repr__(self):
         return (
-            "UserPost for user '"
+            "UserPost for '"
             + self.__post["author"]
-            + "' with title '"
-            + self.__post["title"][:50]
+            + "' titled '"
+            + self.__post["title"][:40]
             + "...'"
         )
 

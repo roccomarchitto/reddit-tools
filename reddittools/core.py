@@ -33,7 +33,14 @@ class AnalysisDriver:
         # Start the service
         analyzer = RedditAnalyzer(mongo, user)
 
-        analyzer.get_subreddits()
+        if query == "subreddits":
+            analyzer.get_subreddits()
+        elif query == "titles":
+            analyzer.get_titles()
+        elif query == "scores":
+            analyzer.get_scores()
+        elif query == "locked":
+            analyzer.get_locked()
 
 
 class PostfinderDriver:
@@ -58,8 +65,9 @@ class PostfinderDriver:
         # TODO .gitignore users file
         users = PostfinderDriver.file_to_usernames(users_file)
 
-        max_posts = 1  # Maximum number of posts per user to scrape
-        max_users = 1  # Maximum number of users to scrape from the file
+        # TODO parse as args instead of hardcode
+        max_posts = 100  # Maximum number of posts per user to scrape
+        max_users = 5  # Maximum number of users to scrape from the file
         for username in users[: max(max_users + 1, len(users) - 1)]:
             # Perform action, then move records to signify completion
             post_finder.find_user_posts(username, max_posts)
@@ -103,7 +111,6 @@ def main():
 
     env_path = os.path.abspath(os.getcwd()) + "/.env"
     config = dotenv_values(env_path)
-    print("CONFIG:", config, env_path, config["MONGO_URL"])
 
     arg_config = Parser.parse(sys.argv[1:])
     if "postfinder" in arg_config:

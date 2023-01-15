@@ -15,6 +15,7 @@ class RedditPostFinder:
     def find_user_posts(self, username: str, limit: int = 1) -> bool:
         """Scrape the max number of (~1000) new posts for a user and send to the database."""
         try:
+            print("Scraping posts for user", username)
             reddit_account = self.reddit.redditor(username)
             submissions = reddit_account.submissions.new(
                 limit=limit
@@ -35,17 +36,24 @@ class RedditPostFinder:
                     "selftext": post.selftext,
                     "upvote_ratio": post.upvote_ratio,
                     "permalink": post.permalink,
+                    "locked": post.locked,
                 }
-                print(user_data)
                 post_object = UserPost(user_data)
                 user_posts.append(post_object)
                 idx += 1
+                if idx % 25 == 0:
+                    print(f"Post #{idx} done...\t {user_posts[-1]}")
 
-            print(*user_posts, sep="\n")
-            print("SUBMITITNG POSTS TO DATABASE")
+            # print(*user_posts, sep="\n")
+            print("\nScraping complete. Uploading to database.")
+            idx = 0
             for post in user_posts:
                 self.mongo.submit_post(post)
-            print("Complete.")
+                idx += 1
+                if idx % 25 == 0:
+                    print(f"Post #{idx} submitted...")
+
+            print("Postfinder operation complete.")
 
             return True
         except Exception as e:

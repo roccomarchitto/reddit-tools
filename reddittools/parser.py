@@ -70,6 +70,6 @@ class Parser:
         if args.postfinder and args.postfinder != "default_postfinder":
             users_file = ""
             users_file = args.postfinder
-            print("POSTFINDER CALLED WITH FILE", args.postfinder)
+
             # Put the results into a dictionary and return it
             argdict["postfinder"] = users_file

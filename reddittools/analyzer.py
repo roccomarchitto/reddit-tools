@@ -36,3 +36,35 @@ class RedditAnalyzer:
         posts_arr = [post["subreddit"] for post in posts]
         # By default, sort by frequency
         return sorted(posts_arr, key=posts_arr.count, reverse=True)
+
+    @logger
+    def get_scores(self):
+        """
+        Return a list of the most recent post scores for the specified user.
+        """
+        posts = self.mongo.get_post(self.user)
+        posts_arr = [str(post["score"]) for post in posts]
+        # By default, sort by occurrence
+        return posts_arr
+
+    @logger
+    def get_locked(self):
+        """
+        Return a list of the most recent subreddits for the specified user.
+        """
+        posts = self.mongo.get_post(self.user)
+        posts_arr = [str(post["locked"]) for post in posts]
+        amt_locked = str(posts_arr.count("True"))
+        posts_arr.insert(0, str(float(int(amt_locked) / len(posts_arr))))
+        # First entry is percent locked
+        return posts_arr
+
+    @logger
+    def get_titles(self):
+        """
+        Return a list of the most recent subreddits for the specified user.
+        """
+        posts = self.mongo.get_post(self.user)
+        posts_arr = [post["title"] for post in posts]
+        # By default, sort by recent occurrence
+        return posts_arr
