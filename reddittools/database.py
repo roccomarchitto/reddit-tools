@@ -66,11 +66,6 @@ class MongoWrapper(DatabaseWrapper):
         self.db = self.client[mongo_db_name]
         self.collection = self.db["users"]
 
-        # pa = {"author": "MOO", "score": 8}
-        # u = UserPost(pa)
-        # print("X:", self.submit_post(u))
-        # print(self.get_posts()[-3:])
-
     def connect(self) -> MongoClient:
         client = MongoClient(self.mongo_url, serverSelectionTimeoutMS=5000)
         client.server_info()  # Raise an exception if the connection times out
@@ -89,7 +84,6 @@ class MongoWrapper(DatabaseWrapper):
 
         # If the user doesn't exist, create it
         user_dict = self.collection.find_one({"name": username})
-        print(user_dict)
         if not user_dict:
             user_starter = {"name": username, "posts": []}
             self.collection.insert_one(user_starter)

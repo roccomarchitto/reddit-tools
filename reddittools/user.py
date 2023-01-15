@@ -35,6 +35,8 @@ class UserPost:
             "url",
             "selftext",
             "upvote_ratio",
+            "permalink",
+            "locked",
         ]
 
         # For every valid attribute passed in, set the corresponding

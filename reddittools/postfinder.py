@@ -35,6 +35,7 @@ class RedditPostFinder:
                     "url": post.url,
                     "selftext": post.selftext,
                     "upvote_ratio": post.upvote_ratio,
+                    "permalink": post.permalink,
                 }
                 print(user_data)
                 post_object = UserPost(user_data)
@@ -45,6 +46,7 @@ class RedditPostFinder:
             print("SUBMITITNG POSTS TO DATABASE")
             for post in user_posts:
                 self.mongo.submit_post(post)
+            print("Complete.")
 
             return True
         except Exception as e:

@@ -3,7 +3,7 @@
 
 from setuptools import setup
 
-version = '0.2.0 BANNER'
+version = '0.3.0 PRE ALPHA'
 
 with open("README.md", "rb") as f:
     long_desc = f.read().decode("utf-8")
