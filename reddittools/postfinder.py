@@ -11,7 +11,6 @@ class RedditPostFinder:
         self.reddit = reddit
         self.mongo = mongo
         print("Post finder invoked.")
-        pass
 
     def find_user_posts(self, username: str, limit: int = 1) -> bool:
         """Scrape the max number of (~1000) new posts for a user and send to the database."""

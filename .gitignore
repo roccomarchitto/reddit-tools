@@ -1,6 +1,7 @@
 # Postfinder config file
 input.cfg
 processed.log
+logger.out
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

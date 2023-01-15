@@ -17,9 +17,30 @@ from praw import Reddit
 from .postfinder import RedditPostFinder
 from .database import MongoWrapper
 from .parser import Parser
+from .analyzer import RedditAnalyzer
+
+
+class AnalysisDriver:
+    """
+    TODO
+    """
+
+    @staticmethod
+    def start_service(config: dict, user: str, query: str):
+        # config is the parsed .env file dictionary
+        mongo = MongoWrapper(config["MONGO_URL"], config["MONGO_DB_NAME"])
+
+        # Start the service
+        analyzer = RedditAnalyzer(mongo, user)
+
+        analyzer.get_subreddits()
 
 
 class PostfinderDriver:
+    """
+    TODO
+    """
+
     @staticmethod
     def start_service(config: dict, users_file: str):
         # config is the parsed .env file dictionary
@@ -86,9 +107,15 @@ def main():
 
     arg_config = Parser.parse(sys.argv[1:])
     if "postfinder" in arg_config:
-        # Postfinder service should be called
+        # Postfinder service should be invoked
         users_file = arg_config["postfinder"]
         print("Calling postfinder on file", users_file)
         PostfinderDriver.start_service(config, users_file)
+    if "analyzer" in arg_config:
+        user, query = arg_config["analyzer"]
+        # Analyzer service should be invoked
+        print("Invoking analyzer on user", user, "with query", query)
+        AnalysisDriver.start_service(config, user, query)
+
     # TODO: Drop duplicate posts in DB by ID; furthermore, if this is detected in
     #       a run with a large number of tasks, abort the run

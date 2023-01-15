@@ -51,8 +51,11 @@ class Parser:
         if (
             args.analyzer and args.analyzer != "default_analyzer"
         ):  # TODO make this better
+            valid_queries = ["subreddits", "scores", "locked", "titles"]
             if len(args.analyzer) != 2:
                 raise Exception("Analyzer arguments are incorrect.")
+            elif args.analyzer[1] not in valid_queries:
+                raise Exception("Analyzer query not valid.")
             else:
                 argdict["analyzer"] = (
                     args.analyzer[0],
@@ -64,10 +67,9 @@ class Parser:
         """
         TODO
         """
-        users_file = ""
         if args.postfinder and args.postfinder != "default_postfinder":
+            users_file = ""
             users_file = args.postfinder
             print("POSTFINDER CALLED WITH FILE", args.postfinder)
-
-        # Put the results into a dictionary and return it
-        argdict["postfinder"] = users_file
+            # Put the results into a dictionary and return it
+            argdict["postfinder"] = users_file
