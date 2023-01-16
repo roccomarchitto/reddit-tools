@@ -6,7 +6,7 @@ TODO
 
 # TODO - locked not working
 
-__version__ = "0.3.0 PRE ALPHA"
+__version__ = "0.4.0 PRE ALPHA"
 
 import sys
 import os
