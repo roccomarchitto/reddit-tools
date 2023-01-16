@@ -51,7 +51,7 @@ class Parser:
         if (
             args.analyzer and args.analyzer != "default_analyzer"
         ):  # TODO make this better
-            valid_queries = ["subreddits", "scores", "locked", "titles"]
+            valid_queries = ["subreddits", "scores", "locked", "titles", "summary"]
             if len(args.analyzer) != 2:
                 raise Exception("Analyzer arguments are incorrect.")
             elif args.analyzer[1] not in valid_queries:

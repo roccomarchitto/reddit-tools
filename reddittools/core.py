@@ -41,6 +41,11 @@ class AnalysisDriver:
             analyzer.get_scores()
         elif query == "locked":
             analyzer.get_locked()
+        elif query == "summary":
+            analyzer.get_summary()
+        else:
+            # TODO raise exception
+            pass
 
 
 class PostfinderDriver:

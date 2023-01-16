@@ -2,6 +2,7 @@
 input.cfg
 processed.log
 logger.out
+logger.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
